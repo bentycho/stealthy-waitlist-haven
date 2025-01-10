@@ -13,7 +13,7 @@ const Index = () => {
           </div>
           
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold max-w-4xl mx-auto leading-tight">
-            Something extraordinary is brewing in silence
+            Behind the scenes, innovation is quietly transforming the future of Life Science
           </h1>
           
           <p className="text-lg sm:text-xl text-white/70 max-w-2xl mx-auto">
