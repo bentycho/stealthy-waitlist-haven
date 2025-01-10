@@ -25,13 +25,6 @@ const Index = () => {
         <div className="mt-12 w-full animate-fadeIn" style={{ animationDelay: "0.4s" }}>
           <WaitlistForm />
         </div>
-
-        <div 
-          className="mt-16 text-white/50 text-sm animate-fadeIn"
-          style={{ animationDelay: "0.6s" }}
-        >
-          Join hundreds of others already on the waitlist
-        </div>
       </div>
     </div>
   );
