@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
+import { supabase } from "@/lib/supabase";
 
 export const WaitlistForm = () => {
   const [email, setEmail] = useState("");
@@ -12,16 +13,30 @@ export const WaitlistForm = () => {
     e.preventDefault();
     setIsLoading(true);
 
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    try {
+      const { error } = await supabase
+        .from('waitlist')
+        .insert([{ email }]);
 
-    toast({
-      title: "Success!",
-      description: "You've been added to our waitlist. We'll be in touch soon.",
-    });
+      if (error) throw error;
 
-    setEmail("");
-    setIsLoading(false);
+      toast({
+        title: "Success!",
+        description: "You've been added to our waitlist. We'll be in touch soon.",
+      });
+
+      setEmail("");
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message === "duplicate key value violates unique constraint \"waitlist_email_key\""
+          ? "This email is already on the waitlist."
+          : "Failed to join waitlist. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
