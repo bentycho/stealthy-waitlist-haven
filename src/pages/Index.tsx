@@ -1,7 +1,39 @@
 import { ParticleBackground } from "@/components/ParticleBackground";
 import { WaitlistForm } from "@/components/WaitlistForm";
+import { useEffect } from "react";
+import { useToast } from "@/components/ui/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 const Index = () => {
+  const { toast } = useToast();
+
+  useEffect(() => {
+    const channel = supabase
+      .channel('schema-db-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'waitlist'
+        },
+        (payload) => {
+          // Don't show notification for your own submission
+          if (!payload.new?.email) return;
+          
+          toast({
+            title: "New Waitlist Signup!",
+            description: `${payload.new.email} just joined the waitlist.`,
+          });
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [toast]);
+
   return (
     <div className="min-h-screen bg-black text-white relative overflow-hidden">
       <ParticleBackground />
