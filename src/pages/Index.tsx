@@ -9,16 +9,17 @@ const Index = () => {
 
   useEffect(() => {
     const channel = supabase
-      .channel('schema-db-changes')
+      .channel('waitlist-notifications')
       .on(
         'postgres_changes',
         {
-          event: 'INSERT',
+          event: '*',
           schema: 'public',
-          table: 'waitlist'
+          table: 'waitlist',
+          filter: 'email=eq.' + 'ben@tychopharma.com'
         },
         (payload) => {
-          // Don't show notification for your own submission
+          if (payload.eventType !== 'INSERT') return;
           if (!payload.new?.email) return;
           
           toast({
@@ -30,7 +31,7 @@ const Index = () => {
       .subscribe();
 
     return () => {
-      supabase.removeChannel(channel);
+      channel.unsubscribe();
     };
   }, [toast]);
 
