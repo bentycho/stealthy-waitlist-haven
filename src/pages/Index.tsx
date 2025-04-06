@@ -1,8 +1,10 @@
+
 import { ParticleBackground } from "@/components/ParticleBackground";
 import { WaitlistForm } from "@/components/WaitlistForm";
 import { useEffect } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { Link } from "react-router-dom";
 
 const Index = () => {
   const { toast } = useToast();
@@ -58,6 +60,16 @@ const Index = () => {
         <div className="mt-12 w-full animate-fadeIn" style={{ animationDelay: "0.4s" }}>
           <WaitlistForm />
         </div>
+      </div>
+      
+      {/* Privacy Policy Link */}
+      <div className="absolute bottom-4 right-4 animate-fadeIn" style={{ animationDelay: "0.6s" }}>
+        <Link 
+          to="/privacy" 
+          className="text-sm text-white/50 hover:text-white transition-colors underline underline-offset-4"
+        >
+          Privacy Policy
+        </Link>
       </div>
     </div>
   );
